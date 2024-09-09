@@ -1,71 +1,69 @@
 # OpenTK3DEngine
 
-## Todo:
+**OpenTK3DEngine** is a simple and versatile 3D engine built on top of OpenTK, designed to simplify 3D and 2D graphics development in C#. It provides easy-to-use functions for rendering and manipulating 3D objects and 2D graphics, making it perfect for simple game development and graphical applications.
 
-- [ ] Add drawPolygon Function (p5.js Triangle strip style),
+## Features
 
-- [x] Add internal support for fonts using the microsoft Font class to create a bitmap and font data, removing the need for external programs,
-
-- [x] Make other 3D objects(cylinder, torus) not need .obj files to work
+- **Simplified 3D Rendering**: Create and manipulate 3D objects such as cubes, spheres, toruses, and cylinders with ease.
+- **2D Graphics Functions**: Draw 2D shapes, lines, ellipses, text, and textured quads and rectangles.
+- **Texture and Font Support**: Load and apply textures to objects and draw text with built-in font support.
+- **Configurable Rendering**: Easily control depth testing, alpha blending, and input handling.
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Basic Setup Instructions](#using-the-library)
-  - [Example code](#example-code)
+- [Basic Setup Instructions](#basic-setup-instructions)
+- [Example Code](#example-code)
 - [Current Available Functions](#current-available-functions)
-  - [On **OnLoad**](#on-onload)
-    - [Before Base.OnLoad](#make-sure-to-add-these-before-baseonload)
-    - [After Base.OnLoad](#make-sure-to-add-these-after-baseonload)
-  - [On **OnRenderFrame**](#on-onrenderframe)
-    - [3D Functions](#3d-functions)
-    - [2D Functions](#2d-functions)
-    - [Fonts Class](#font-class)
-    - [Settings Class](#settings-class)
+  - [On OnLoad](#on-onload)
+  - [On OnRenderFrame](#on-onrenderframe)
+- [3D Functions](#3d-functions)
+- [2D Functions](#2d-functions)
+- [Fonts Class](#fonts-class)
+- [Settings Class](#settings-class)
 
 ## Overview
 
-This library simplifies the use of the openTK library by wrapping it into simple to use functions, perferct for C# and VB simple game development. 
+This library wraps the OpenTK library with easy-to-use functions tailored for C# and VB, simplifying 3D and 2D graphics development.
 
-### Using the library:
+## Basic Setup Instructions
 
-1. Add the library to your solution from Nuget.
+1. Add the library to your solution from NuGet.
+2. Add a new `.cs` file to your console app as your main code file.
+3. Include the example code provided in your `Program.cs` file.
+4. If you prefer a Windows application instead of a console app, adjust your project properties accordingly.
 
-### Example code:
+## Example Code
 
-1. Add a new .cs line to your console app, that will be your main place to code <br>(Example bellow no. 1)
-2. On your program.cs file add the example code no. 2,
-3. If you dont want the console opening change your project properties to Windows Application
+Here's a basic example to get you started:
 
-```c#
+```csharp
 using System;
 using OpenTK;
 using OpenTK.Graphics;
 using Program;
 
-namespace yourNameSpace
+namespace YourNamespace
 {
-    public class yourClass : MainRenderWindow
+    public class YourClass : MainRenderWindow
     {
-        public Game(int width, int height, string title, double fps) : base(width, height, title, fps)
+        public YourClass(int width, int height, string title, double fps) : base(width, height, title, fps)
         {
         }
 
         protected override void OnLoad()
         {
-            setClearColor(new Color4(0.0f, 0.0f, 0.0f, 1.0f)); //Sets Background Color
-            UseDepthTest = false; //Enables Depth Testing for 3D
-            UseAlpha = true; //Enables alpha use
-            KeyboardAndMouseInput = false; //Enables keyboard and mouse input for 3D movement
+            setClearColor(new Color4(0.0f, 0.0f, 0.0f, 1.0f)); // Sets Background Color
+            UseDepthTest = false; // Enables Depth Testing for 3D
+            UseAlpha = true; // Enables alpha use
+            KeyboardAndMouseInput = false; // Disables default keyboard and mouse input
             base.OnLoad();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             Clear();
-
-            DrawEllipse(500, 500, 10f, 10f, new Color4(1.0f, 1.0f, 1.0f, 1.0f)); //Draws a circle
-
+            DrawEllipse(500, 500, 10f, 10f, new Color4(1.0f, 1.0f, 1.0f, 1.0f)); // Draws a circle
             base.OnRenderFrame(e);
         }
 
@@ -75,71 +73,80 @@ namespace yourNameSpace
         }
     }
 }
-```
 
-```c#
-namespace yourNamespace
+namespace YourNamespace
 {
     static class Program
     {
         static void Main(string[] args)
         {
-            using youClass game = new youClass(1000, 1000, "Test App", 60.0);
-            //Run takes a double, which is how many frames per second it should strive to reach.
-            //You can leave that out and it'll just update as fast as the hardware will allow it.
+            using YourClass game = new YourClass(1000, 1000, "Test App", 60.0);
             game.Run();
         }
     }
 }
+
 ```
 
 ## Current Available Functions
 
 ### On OnLoad
 
-#### Make sure to add these **before** base.OnLoad()
+**Before Base.OnLoad:**
 
-- `Boolean UseDepthTest (*Default = false*)` => Specifies if rendering engine will use depth test *(When depth test is true alpha will **not** work, if false rendering will work based on the which functions are called first)*,
-- `Boolean UseAlpha (*Default = true*)` => Specifies if rendering engine will use alpha,
-- `Boolean KeyboardAndMouseInput (*Default = true*)` => Specifies if rendering engine will use default keyboard and mouse input,
-- `Boolean showSet (*Default = false*)` => Specifies if rendering engine open settings on esc,
+- `Boolean UseDepthTest (*Default = false*)`: Specifies if the rendering engine will use depth test.
+- `Boolean UseAlpha (*Default = true*)`: Specifies if the rendering engine will use alpha blending.
+- `Boolean KeyboardAndMouseInput (*Default = true*)`: Specifies if the rendering engine will handle default keyboard and mouse input.
+- `Boolean showSet (*Default = false*)`: Specifies if the rendering engine opens settings on escape.
 
-#### Make sure to add these **after** base.OnLoad()
+**After Base.OnLoad:**
 
-- `CreateMainLight(Vector3 pos, Color4 color)` => Creates your main Light (static), make sure to run this function __before__ any other 3D function but after Base.OnLoad(),
-- `CreateCube(Color4 Color)` => Creates a 3D cube of the color you specify, returns a handle for making modifications to the cube,
-- `CreateSphere(Color4 Color)` => Creates a 3D sphere of the color you specify, returns a handle for making modifications to the sphere,
-- `CreateTorus(Color4 Color)` => Creates a 3D torus of the color you specify, returns a handle for making modifications to the torus,
-- `CreateCylinder(Color4 Color)` => Creates a 3D cylinder of the color you specify, returns a handle for making modifications to the cylinder,
-- `CreatePlane(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, Color4 color)` => Creates a 3D plane of the color you specify, returns a handle for making modifications to the plane,
-- `OpenTexturedObj(string obj, string texture)` => Opens .obj file with an attached .png texture, returns a handle for making modifications to the object,
-- `OpenObj(string obj, Color4 color)` => Opens .obj file with no attached .png texture, returns a handle for making modifications to the object,
+- `CreateMainLight(Vector3 pos, Color4 color)`: Creates your main light.
+- `CreateCube(Color4 color)`: Creates a 3D cube with the specified color.
+- `CreateSphere(Color4 color)`: Creates a 3D sphere with the specified color.
+- `CreateTorus(Color4 color)`: Creates a 3D torus with the specified color.
+- `CreateCylinder(Color4 color)`: Creates a 3D cylinder with the specified color.
+- `CreatePlane(...)`: Creates a 3D plane with the specified parameters.
+- `OpenTexturedObj(string obj, string texture)`: Opens an .obj file with an attached .png texture.
+- `OpenObj(string obj, Color4 color)`: Opens an .obj file with the specified color.
 
-### On **OnRenderFrame**
+### On OnRenderFrame
 
-#### 3D Functions:
+**3D Functions:**
 
-1. `Render3DObjects()` => Renders the 3D objects to the screen, call before any 2D functions if mixing 2D with 3D
-1. `RotateObject(float x, float y, float z, int handle)` => Rotates the object passed in by the amounts pass in in each direction
-1. `RotateTexturedObject(float x, float y, float z, int handle)` => Rotates the textured object passed in by the amounts pass in in each direction
-1. `ScaleObject(float scale, int handle)` => Scales the object passed in by the amount pass
-1. `TranslateObject(float x, float y, float z, int handle)` => Translates the object by a vector passed in
-1. `TranslateTexturedObject(float x, float y, float z, int handle)` => Translates the textured object by a vector passed in
+- `Render3DObjects()`: Renders the 3D objects to the screen.
+- `RotateObject(float x, float y, float z, int handle)`: Rotates the object by the specified amounts in each direction.
+- `ScaleObject(float scale, int handle)`: Scales the object by the specified amount.
+- `TranslateObject(float x, float y, float z, int handle)`: Translates the object by the specified vector.
 
-#### 2D Functions:
+**2D Functions:**
 
-1. `DrawRectangle(float x1, float y1, float x2, float y2, Color4 color)`
-1. `DrawLine(float x1, float y1, float x2, float y2, Color4 color)`
-1. `DrawEllipse(float x, float y, float radiusX, float radiusY, Color4 color)`
-1. `DrawTexturedLine(float x1, float y1, float u1, float v1, float x2, float y2, float u2, float v2, Texture texture, Color4 color)`
-1. `DrawQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, Color4 color)`
-1. `DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, Color4 color)`
-1. `DrawText(string text, float x, float y, Font f, Color4 col, int TextAlign)`
-1. ***drawTexturedRectangle() overloads***
-    1. `DrawTexturedRectangle(float x1, float y1, float u1, float v1, float x2, float y2, float u2, float v2, string texturePath, Color4 color, TextureMinFilter min, TextureMagFilter mag)`
-    1. `DrawTexturedRectangle(float x1, float y1, float u1, float v1, float x2, float y2, float u2, float v2, Bitmap textureBitmap, Color4 color, TextureMinFilter min, TextureMagFilter mag)`
-    1. `DrawTexturedRectangle(float x1, float y1, float u1, float v1, float x2, float y2, float u2, float v2, Texture texture, Color4 color)`
-1. ***drawTexturedQuad() overloads***
-    1. `DrawTexturedQuad(float x1, float y1, float z1, float u1, float v1, float x2, float y2, float z2, float u2, float v2, float x3, float y3, float z3, float u3, float v3, float x4, float y4, float z4, float u4, float v4, string texturePath, Color4 color, TextureMinFilter min, TextureMagFilter mag)`
-    1. `DrawTexturedQuad(float x1, float y1, float z1, float u1, float v1, float x2, float y2, float z2, float u2, float v2, float x3, float y3, float z3, float u3, float v3, float x4, float y4, float z4, float u4, float v4, Bitmap textureBitmap, Color4 color, TextureMinFilter min, TextureMagFilter mag)`
-    1. `DrawTexturedQuad(float x1, float y1, float z1, float u1, float v1, float x2, float y2, float z2, float u2, float v2, float x3, float y3, float z3, float u3, float v3, float x4, float y4, float z4, float u4, float v4, Texture texture, Color4 color)`
+- `DrawRectangle(float x1, float y1, float x2, float y2, Color4 color)`: Draws a rectangle.
+- `DrawLine(float x1, float y1, float x2, float y2, Color4 color)`: Draws a line.
+- `DrawEllipse(float x, float y, float radiusX, float radiusY, Color4 color)`: Draws an ellipse.
+- `DrawTexturedLine(...)`: Draws a textured line.
+- `DrawQuad(...)`: Draws a textured quad.
+- `DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, Color4 color)`: Draws a triangle.
+- `DrawText(string text, float x, float y, Font f, Color4 col, int TextAlign)`: Draws text with the specified font, color, and alignment.
+
+**drawTexturedRectangle() Overloads:**
+
+- `DrawTexturedRectangle(...)`: Draws a textured rectangle with various parameters.
+
+**drawTexturedQuad() Overloads:**
+
+- `DrawTexturedQuad(...)`: Draws a textured quad with various parameters.
+
+### Fonts Class
+
+- Provides functionality for handling fonts.
+
+### Settings Class
+
+- Allows configuration of engine settings.
+
+## Todo
+
+- Implement `drawPolygon` function (p5.js Triangle Strip style).
+- Add internal font support using Microsoft Font class to create bitmap and font data.
+- Enhance support for 3D objects (cylinders, toruses) to function without .obj files.
